@@ -1,20 +1,15 @@
-function load(key, defaults) {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : defaults;
-}
+/* ========= LISTAS GRANDES (DESKTOP-LIKE) ========= */
 
-function save(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
+let temas = JSON.parse(localStorage.getItem("temas")) || [
+  "Culpa","Solidão","Identidade","Perda","Vazio","Medo do desconhecido",
+  "Obsessão","Redenção","Negação","Isolamento","Segredo","Decadência","Esperança frágil"
+];
 
-/* ===== DADOS ===== */
-let temas = load("temas", [
-  "Culpa","Solidão","Identidade","Perda","Vazio","Segredo","Obsessão","Redenção"
-]);
-
-let locais = load("locais", [
-  "Casa isolada","Cidade pequena","Estrada deserta","Quarto fechado","Prédio abandonado"
-]);
+let locais = JSON.parse(localStorage.getItem("locais")) || [
+  "Casa isolada","Apartamento pequeno","Cidade pequena","Estrada deserta",
+  "Prédio abandonado","Hospital","Escola antiga","Quarto fechado",
+  "Motel de beira de estrada","Zona rural","Litoral vazio","Lugar indefinido"
+];
 
 let visoes = [
   "Primeira pessoa",
@@ -23,19 +18,13 @@ let visoes = [
 ];
 
 let tons = [
-  "Melancólico",
-  "Opressivo",
-  "Tenso",
-  "Sombrio",
-  "Reflexivo"
+  "Melancólico","Opressivo","Angustiante","Tenso",
+  "Frio","Nostálgico","Sombrio","Reflexivo"
 ];
 
 let generos = [
-  "Terror",
-  "Suspense",
-  "Drama",
-  "Mistério",
-  "Fantástico"
+  "Terror","Suspense","Drama","Mistério",
+  "Fantástico","Ficção científica","Existencial"
 ];
 
 let perguntas = [
@@ -51,42 +40,39 @@ let perguntas = [
   "Qual medo guia silenciosamente suas decisões?"
 ];
 
-/* ===== UI ===== */
+/* ========= FUNÇÕES ========= */
+
 function preencher(id, lista) {
   const select = document.getElementById(id);
   select.innerHTML = "";
   lista.forEach(item => {
     const opt = document.createElement("option");
-    opt.value = item;
     opt.textContent = item;
     select.appendChild(opt);
   });
 }
 
-function atualizarTudo() {
-  preencher("tema", temas);
-  preencher("local", locais);
-  preencher("visao", visoes);
-  preencher("tom", tons);
-  preencher("genero", generos);
+function salvar() {
+  localStorage.setItem("temas", JSON.stringify(temas));
+  localStorage.setItem("locais", JSON.stringify(locais));
 }
 
-/* ===== AÇÕES ===== */
-function adicionar(tipo, inputId, lista, storageKey, selectId) {
-  const input = document.getElementById(inputId);
-  const valor = input.value.trim();
+function addTema() {
+  const valor = document.getElementById("temaNovo").value.trim();
+  if (!valor || temas.includes(valor)) return;
+  temas.push(valor);
+  salvar();
+  preencher("tema", temas);
+  document.getElementById("temaNovo").value = "";
+}
 
-  if (!valor) return;
-
-  if (lista.includes(valor)) {
-    alert("Essa ideia já existe.");
-    return;
-  }
-
-  lista.push(valor);
-  save(storageKey, lista);
-  preencher(selectId, lista);
-  input.value = "";
+function addLocal() {
+  const valor = document.getElementById("localNovo").value.trim();
+  if (!valor || locais.includes(valor)) return;
+  locais.push(valor);
+  salvar();
+  preencher("local", locais);
+  document.getElementById("localNovo").value = "";
 }
 
 function gerar() {
@@ -97,22 +83,17 @@ function gerar() {
   const genero = document.getElementById("genero").value;
 
   document.getElementById("resultado").innerText =
-    `Em ${visao.toLowerCase()}, a narrativa se passa em ${local.toLowerCase()}.
+    `Em ${visao.toLowerCase()}, a narrativa se passa em ${local.toLowerCase()}. 
 O conflito central envolve ${tema.toLowerCase()}, com um tom ${tom.toLowerCase()} dentro do ${genero.toLowerCase()}.`;
 
   document.getElementById("pergunta").innerText =
     "🧭 " + perguntas[Math.floor(Math.random() * perguntas.length)];
 }
 
-/* ===== EVENTOS ===== */
-document.addEventListener("DOMContentLoaded", () => {
-  atualizarTudo();
+/* ========= INICIALIZA ========= */
 
-  document.getElementById("addTema").onclick = () =>
-    adicionar("tema", "temaNovo", temas, "temas", "tema");
-
-  document.getElementById("addLocal").onclick = () =>
-    adicionar("local", "localNovo", locais, "locais", "local");
-
-  document.getElementById("gerarBtn").onclick = gerar;
-});
+preencher("tema", temas);
+preencher("local", locais);
+preencher("visao", visoes);
+preencher("tom", tons);
+preencher("genero", generos);
