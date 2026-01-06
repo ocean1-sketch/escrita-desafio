@@ -57,7 +57,7 @@ function gerar() {
 
   resultado.innerText =
     `Em ${v.toLowerCase()}, a narrativa se passa em ${l.toLowerCase()}.
-O conflito central envolve ${t.toLowerCase()}, com um tom ${tomV.toLowerCase()} dentro do ${g.toLowerCase()}.`;
+O conflito central envolve ${t.toLowerCase()}, com um tom ${tomV.toLowerCase()} dentro de ${g.toLowerCase()}.`;
 
   pergunta.innerText =
     "🧭 " + perguntas[Math.floor(Math.random() * perguntas.length)];
@@ -77,3 +77,4 @@ document.addEventListener("DOMContentLoaded", () => {
   btnGenero.onclick = () => adicionar(generos, "generos", "generoNovo", "genero");
   btnGerar.onclick  = gerar;
 });
+
