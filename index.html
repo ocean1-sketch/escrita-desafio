@@ -14,16 +14,30 @@
 <div class="bloco">
   <label>Tema</label>
   <select id="tema"></select>
+  <input id="temaNovo" placeholder="Adicionar tema">
+  <button onclick="addItem('tema')">Adicionar</button>
 </div>
 
 <div class="bloco">
   <label>Local</label>
   <select id="local"></select>
+  <input id="localNovo" placeholder="Adicionar local">
+  <button onclick="addItem('local')">Adicionar</button>
 </div>
 
 <div class="bloco">
   <label>Visão</label>
   <select id="visao"></select>
+</div>
+
+<div class="bloco">
+  <label>Tom</label>
+  <select id="tom"></select>
+</div>
+
+<div class="bloco">
+  <label>Gênero</label>
+  <select id="genero"></select>
 </div>
 
 <button onclick="gerar()">Gerar ideia</button>
