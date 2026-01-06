@@ -1,7 +1,7 @@
 /* ========= LISTAS GRANDES (DESKTOP-LIKE) ========= */
 
 let temas = JSON.parse(localStorage.getItem("temas")) || [
-  "Culpa","Solidão","Identidade","Perda","Vazio","Medo do desconhecido",
+  "Culpa","Solidão","Identidade","Vazio","Medo do desconhecido",
   "Obsessão","Redenção","Negação","Isolamento","Segredo","Decadência","Esperança frágil"
 ];
 
@@ -97,3 +97,4 @@ preencher("local", locais);
 preencher("visao", visoes);
 preencher("tom", tons);
 preencher("genero", generos);
+
