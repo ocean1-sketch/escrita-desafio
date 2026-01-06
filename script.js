@@ -1,11 +1,13 @@
 function load(key, defaults) {
-  return JSON.parse(localStorage.getItem(key)) || defaults;
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : defaults;
 }
 
 function save(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+/* ===== DADOS ===== */
 let temas = load("temas", [
   "Culpa","Solidão","Identidade","Perda","Vazio","Segredo","Obsessão","Redenção"
 ]);
@@ -14,9 +16,27 @@ let locais = load("locais", [
   "Casa isolada","Cidade pequena","Estrada deserta","Quarto fechado","Prédio abandonado"
 ]);
 
-let visoes = ["Primeira pessoa","Terceira pessoa limitada","Terceira pessoa onisciente"];
-let tons = ["Melancólico","Opressivo","Tenso","Sombrio","Reflexivo"];
-let generos = ["Terror","Suspense","Drama","Mistério","Fantástico"];
+let visoes = [
+  "Primeira pessoa",
+  "Terceira pessoa limitada",
+  "Terceira pessoa onisciente"
+];
+
+let tons = [
+  "Melancólico",
+  "Opressivo",
+  "Tenso",
+  "Sombrio",
+  "Reflexivo"
+];
+
+let generos = [
+  "Terror",
+  "Suspense",
+  "Drama",
+  "Mistério",
+  "Fantástico"
+];
 
 let perguntas = [
   "O que o personagem evita lembrar?",
@@ -31,60 +51,68 @@ let perguntas = [
   "Qual medo guia silenciosamente suas decisões?"
 ];
 
+/* ===== UI ===== */
 function preencher(id, lista) {
   const select = document.getElementById(id);
   select.innerHTML = "";
   lista.forEach(item => {
     const opt = document.createElement("option");
+    opt.value = item;
     opt.textContent = item;
     select.appendChild(opt);
   });
 }
 
-preencher("tema", temas);
-preencher("local", locais);
-preencher("visao", visoes);
-preencher("tom", tons);
-preencher("genero", generos);
+function atualizarTudo() {
+  preencher("tema", temas);
+  preencher("local", locais);
+  preencher("visao", visoes);
+  preencher("tom", tons);
+  preencher("genero", generos);
+}
 
-function addItem(tipo) {
-  const input = document.getElementById(tipo + "Novo");
+/* ===== AÇÕES ===== */
+function adicionar(tipo, inputId, lista, storageKey, selectId) {
+  const input = document.getElementById(inputId);
   const valor = input.value.trim();
+
   if (!valor) return;
 
-  if (tipo === "tema") {
-    temas.push(valor);
-    save("temas", temas);
-    preencher("tema", temas);
+  if (lista.includes(valor)) {
+    alert("Essa ideia já existe.");
+    return;
   }
 
-  if (tipo === "local") {
-    locais.push(valor);
-    save("locais", locais);
-    preencher("local", locais);
-  }
-
+  lista.push(valor);
+  save(storageKey, lista);
+  preencher(selectId, lista);
   input.value = "";
 }
 
 function gerar() {
-  const tema = temaSelect.value;
-  const local = localSelect.value;
-  const visao = visaoSelect.value;
-  const tom = tomSelect.value;
-  const genero = generoSelect.value;
+  const tema = document.getElementById("tema").value;
+  const local = document.getElementById("local").value;
+  const visao = document.getElementById("visao").value;
+  const tom = document.getElementById("tom").value;
+  const genero = document.getElementById("genero").value;
 
-  resultado.innerText =
-    `Em ${visao.toLowerCase()}, a narrativa se passa em ${local.toLowerCase()}. 
+  document.getElementById("resultado").innerText =
+    `Em ${visao.toLowerCase()}, a narrativa se passa em ${local.toLowerCase()}.
 O conflito central envolve ${tema.toLowerCase()}, com um tom ${tom.toLowerCase()} dentro do ${genero.toLowerCase()}.`;
 
-  pergunta.innerText = "🧭 " + perguntas[Math.floor(Math.random() * perguntas.length)];
+  document.getElementById("pergunta").innerText =
+    "🧭 " + perguntas[Math.floor(Math.random() * perguntas.length)];
 }
 
-const temaSelect = document.getElementById("tema");
-const localSelect = document.getElementById("local");
-const visaoSelect = document.getElementById("visao");
-const tomSelect = document.getElementById("tom");
-const generoSelect = document.getElementById("genero");
-const resultado = document.getElementById("resultado");
-const pergunta = document.getElementById("pergunta");
+/* ===== EVENTOS ===== */
+document.addEventListener("DOMContentLoaded", () => {
+  atualizarTudo();
+
+  document.getElementById("addTema").onclick = () =>
+    adicionar("tema", "temaNovo", temas, "temas", "tema");
+
+  document.getElementById("addLocal").onclick = () =>
+    adicionar("local", "localNovo", locais, "locais", "local");
+
+  document.getElementById("gerarBtn").onclick = gerar;
+});
