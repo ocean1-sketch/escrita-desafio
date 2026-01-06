@@ -1,8 +1,9 @@
-/* ========= LISTAS GRANDES (DESKTOP-LIKE) ========= */
+/* ===== LISTAS INICIAIS (SEM "PERDA") ===== */
 
 let temas = JSON.parse(localStorage.getItem("temas")) || [
-  "Culpa","Solidão","Identidade","Vazio","Medo do desconhecido",
-  "Obsessão","Redenção","Negação","Isolamento","Segredo","Decadência","Esperança frágil"
+  "Culpa","Solidão","Identidade","Vazio",
+  "Medo do desconhecido","Obsessão","Redenção",
+  "Negação","Isolamento","Segredo","Decadência","Esperança frágil"
 ];
 
 let locais = JSON.parse(localStorage.getItem("locais")) || [
@@ -11,20 +12,20 @@ let locais = JSON.parse(localStorage.getItem("locais")) || [
   "Motel de beira de estrada","Zona rural","Litoral vazio","Lugar indefinido"
 ];
 
-let visoes = [
+let visoes = JSON.parse(localStorage.getItem("visoes")) || [
   "Primeira pessoa",
   "Terceira pessoa limitada",
   "Terceira pessoa onisciente"
 ];
 
-let tons = [
-  "Melancólico","Opressivo","Angustiante","Tenso",
-  "Frio","Nostálgico","Sombrio","Reflexivo"
+let tons = JSON.parse(localStorage.getItem("tons")) || [
+  "Melancólico","Opressivo","Angustiante",
+  "Tenso","Frio","Nostálgico","Sombrio","Reflexivo"
 ];
 
-let generos = [
-  "Terror","Suspense","Drama","Mistério",
-  "Fantástico","Ficção científica","Existencial"
+let generos = JSON.parse(localStorage.getItem("generos")) || [
+  "Terror","Suspense","Drama",
+  "Mistério","Fantástico","Ficção científica","Existencial"
 ];
 
 let perguntas = [
@@ -40,7 +41,7 @@ let perguntas = [
   "Qual medo guia silenciosamente suas decisões?"
 ];
 
-/* ========= FUNÇÕES ========= */
+/* ===== FUNÇÕES UTILITÁRIAS ===== */
 
 function preencher(id, lista) {
   const select = document.getElementById(id);
@@ -52,49 +53,53 @@ function preencher(id, lista) {
   });
 }
 
-function salvar() {
+function salvarTudo() {
   localStorage.setItem("temas", JSON.stringify(temas));
   localStorage.setItem("locais", JSON.stringify(locais));
+  localStorage.setItem("visoes", JSON.stringify(visoes));
+  localStorage.setItem("tons", JSON.stringify(tons));
+  localStorage.setItem("generos", JSON.stringify(generos));
 }
 
+/* ===== ADIÇÃO DE IDEIAS ===== */
+
 function addTema() {
-  const valor = document.getElementById("temaNovo").value.trim();
-  if (!valor || temas.includes(valor)) return;
-  temas.push(valor);
-  salvar();
+  const v = temaNovo.value.trim();
+  if (!v || temas.includes(v)) return;
+  temas.push(v);
+  salvarTudo();
   preencher("tema", temas);
-  document.getElementById("temaNovo").value = "";
+  temaNovo.value = "";
 }
 
 function addLocal() {
-  const valor = document.getElementById("localNovo").value.trim();
-  if (!valor || locais.includes(valor)) return;
-  locais.push(valor);
-  salvar();
+  const v = localNovo.value.trim();
+  if (!v || locais.includes(v)) return;
+  locais.push(v);
+  salvarTudo();
   preencher("local", locais);
-  document.getElementById("localNovo").value = "";
+  localNovo.value = "";
 }
 
-function gerar() {
-  const tema = document.getElementById("tema").value;
-  const local = document.getElementById("local").value;
-  const visao = document.getElementById("visao").value;
-  const tom = document.getElementById("tom").value;
-  const genero = document.getElementById("genero").value;
-
-  document.getElementById("resultado").innerText =
-    `Em ${visao.toLowerCase()}, a narrativa se passa em ${local.toLowerCase()}. 
-O conflito central envolve ${tema.toLowerCase()}, com um tom ${tom.toLowerCase()} dentro do ${genero.toLowerCase()}.`;
-
-  document.getElementById("pergunta").innerText =
-    "🧭 " + perguntas[Math.floor(Math.random() * perguntas.length)];
+function addVisao() {
+  const v = visaoNovo.value.trim();
+  if (!v || visoes.includes(v)) return;
+  visoes.push(v);
+  salvarTudo();
+  preencher("visao", visoes);
+  visaoNovo.value = "";
 }
 
-/* ========= INICIALIZA ========= */
+function addTom() {
+  const v = tomNovo.value.trim();
+  if (!v || tons.includes(v)) return;
+  tons.push(v);
+  salvarTudo();
+  preencher("tom", tons);
+  tomNovo.value = "";
+}
 
-preencher("tema", temas);
-preencher("local", locais);
-preencher("visao", visoes);
-preencher("tom", tons);
-preencher("genero", generos);
-
+function addGenero() {
+  const v = generoNovo.value.trim();
+  if (!v || generos.includes(v)) return;
+  generos.push(v);
