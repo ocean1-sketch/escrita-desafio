@@ -1,3 +1,8 @@
+/* ==================================================
+   ESCRITA DESAFIO – APP MOBILE (JS COMPLETO)
+   ================================================== */
+
+/* ---------- PERGUNTAS ---------- */
 const perguntas = [
   "O que o personagem evita lembrar?",
   "Que erro do passado ainda influencia tudo?",
@@ -11,70 +16,159 @@ const perguntas = [
   "Qual medo guia silenciosamente suas decisões?"
 ];
 
+/* ---------- STORAGE ---------- */
 function carregar(key, padrao) {
   try {
-    return JSON.parse(localStorage.getItem(key)) || padrao;
+    const v = localStorage.getItem(key);
+    return v ? JSON.parse(v) : padrao;
   } catch {
     return padrao;
   }
 }
-
 function salvar(key, valor) {
   localStorage.setItem(key, JSON.stringify(valor));
 }
 
-let temas   = carregar("temas", ["Culpa","Solidão","Identidade","Vazio","Obsessão","Redenção","Segredo"]);
-let locais  = carregar("locais", ["Casa isolada","Cidade pequena","Estrada deserta","Quarto fechado"]);
-let visoes  = carregar("visoes", ["Primeira pessoa","Terceira pessoa limitada","Terceira pessoa onisciente"]);
-let tons    = carregar("tons", ["Melancólico","Opressivo","Tenso","Sombrio","Reflexivo"]);
-let generos = carregar("generos", ["Terror","Suspense","Drama","Mistério","Fantástico"]);
+/* ---------- LISTAS COMPLETAS (IGUAIS AO APP PC) ---------- */
+let temas = carregar("temas", [
+  "Culpa","Solidão","Identidade","Vazio",
+  "Medo do desconhecido","Obsessão","Redenção",
+  "Negação","Isolamento","Dependência emocional",
+  "Ruptura","Segredo","Decadência","Esperança frágil"
+]);
 
-function preencher(id, lista) {
-  const s = document.getElementById(id);
+let locais = carregar("locais", [
+  "Casa isolada","Apartamento pequeno","Cidade pequena",
+  "Estrada deserta","Prédio abandonado","Hospital",
+  "Escola antiga","Quarto fechado","Motel de beira de estrada",
+  "Subsolo","Zona rural","Litoral vazio",
+  "Bairro esquecido","Interior de um veículo","Lugar indefinido"
+]);
+
+let visoes = carregar("visoes", [
+  "Primeira pessoa",
+  "Terceira pessoa limitada",
+  "Terceira pessoa onisciente"
+]);
+
+let tons = carregar("tons", [
+  "Melancólico","Opressivo","Angustiante",
+  "Tenso","Frio","Nostálgico",
+  "Sombrio","Desesperado",
+  "Reflexivo","Ameaçador"
+]);
+
+let generos = carregar("generos", [
+  "Terror","Suspense","Drama",
+  "Ficção científica","Mistério",
+  "Fantástico","Existencial"
+]);
+
+/* ---------- HELPERS ---------- */
+function $(id) {
+  return document.getElementById(id);
+}
+
+function escolherAleatorio(lista) {
+  return lista[Math.floor(Math.random() * lista.length)];
+}
+
+function preencherSelect(id, lista) {
+  const s = $(id);
+  if (!s) return;
   s.innerHTML = "";
-  lista.forEach(v => {
+  lista.forEach(item => {
     const o = document.createElement("option");
-    o.textContent = v;
+    o.value = item;
+    o.textContent = item;
     s.appendChild(o);
   });
 }
 
-function adicionar(lista, key, inputId, selectId) {
-  const v = document.getElementById(inputId).value.trim();
+function salvarTudo() {
+  salvar("temas", temas);
+  salvar("locais", locais);
+  salvar("visoes", visoes);
+  salvar("tons", tons);
+  salvar("generos", generos);
+}
+
+function adicionar(lista, storageKey, inputId, selectId) {
+  const input = $(inputId);
+  if (!input) return;
+  const v = input.value.trim();
   if (!v || lista.includes(v)) return;
+
   lista.push(v);
-  salvar(key, lista);
-  preencher(selectId, lista);
-  document.getElementById(inputId).value = "";
+  salvar(storageKey, lista);
+  preencherSelect(selectId, lista);
+  input.value = "";
+}
+
+/* ---------- GERADORES ---------- */
+function gerarTexto(tema, local, visao, tom, genero) {
+  return (
+    `Em ${visao.toLowerCase()}, a narrativa se passa em ${local.toLowerCase()}.\n` +
+    `O conflito central envolve ${tema.toLowerCase()}, ` +
+    `com um tom ${tom.toLowerCase()} dentro do ${genero.toLowerCase()}.`
+  );
 }
 
 function gerar() {
-  const t = tema.value;
-  const l = local.value;
-  const v = visao.value;
-  const tomV = tom.value;
-  const g = genero.value;
+  const tema   = $("tema").value;
+  const local  = $("local").value;
+  const visao  = $("visao").value;
+  const tom    = $("tom").value;
+  const genero = $("genero").value;
 
-  resultado.innerText =
-    `Em ${v.toLowerCase()}, a narrativa se passa em ${l.toLowerCase()}.
-O conflito central envolve ${t.toLowerCase()}, com um tom ${tomV.toLowerCase()} dentro de ${g.toLowerCase()}.`;
-
-  pergunta.innerText =
-    "🧭 " + perguntas[Math.floor(Math.random() * perguntas.length)];
+  $("resultado").innerText = gerarTexto(tema, local, visao, tom, genero);
+  $("pergunta").innerText =
+    "🧭 " + escolherAleatorio(perguntas);
 }
 
+function gerarAleatorio() {
+  const tema   = escolherAleatorio(temas);
+  const local  = escolherAleatorio(locais);
+  const visao  = escolherAleatorio(visoes);
+  const tom    = escolherAleatorio(tons);
+  const genero = escolherAleatorio(generos);
+
+  // Atualiza selects visualmente
+  $("tema").value = tema;
+  $("local").value = local;
+  $("visao").value = visao;
+  $("tom").value = tom;
+  $("genero").value = genero;
+
+  $("resultado").innerText = gerarTexto(tema, local, visao, tom, genero);
+  $("pergunta").innerText =
+    "🧭 " + escolherAleatorio(perguntas);
+}
+
+/* ---------- INICIALIZAÇÃO ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-  preencher("tema", temas);
-  preencher("local", locais);
-  preencher("visao", visoes);
-  preencher("tom", tons);
-  preencher("genero", generos);
+  preencherSelect("tema", temas);
+  preencherSelect("local", locais);
+  preencherSelect("visao", visoes);
+  preencherSelect("tom", tons);
+  preencherSelect("genero", generos);
 
-  btnTema.onclick   = () => adicionar(temas, "temas", "temaNovo", "tema");
-  btnLocal.onclick  = () => adicionar(locais, "locais", "localNovo", "local");
-  btnVisao.onclick  = () => adicionar(visoes, "visoes", "visaoNovo", "visao");
-  btnTom.onclick    = () => adicionar(tons, "tons", "tomNovo", "tom");
-  btnGenero.onclick = () => adicionar(generos, "generos", "generoNovo", "genero");
-  btnGerar.onclick  = gerar;
+  $("btnTema")?.addEventListener("click", () =>
+    adicionar(temas, "temas", "temaNovo", "tema")
+  );
+  $("btnLocal")?.addEventListener("click", () =>
+    adicionar(locais, "locais", "localNovo", "local")
+  );
+  $("btnVisao")?.addEventListener("click", () =>
+    adicionar(visoes, "visoes", "visaoNovo", "visao")
+  );
+  $("btnTom")?.addEventListener("click", () =>
+    adicionar(tons, "tons", "tomNovo", "tom")
+  );
+  $("btnGenero")?.addEventListener("click", () =>
+    adicionar(generos, "generos", "generoNovo", "genero")
+  );
+
+  $("btnGerar")?.addEventListener("click", gerar);
+  $("btnAleatorio")?.addEventListener("click", gerarAleatorio);
 });
-
