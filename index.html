@@ -4,89 +4,135 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Escrita Desafio</title>
+
   <style>
     body {
-      background:#1b1b1b;
-      color:white;
-      font-family:Arial,sans-serif;
-      padding:20px;
+      background: #1b1b1b;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
     }
-    h1 { text-align:center; }
-    .bloco { margin-bottom:15px; }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .bloco {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
     select, input, button {
-      width:100%;
-      padding:10px;
-      margin-top:5px;
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      font-size: 14px;
     }
+
     button {
-      background:#444;
-      color:white;
-      border:none;
+      background: #444;
+      color: white;
+      border: none;
+      cursor: pointer;
     }
+
+    button:active {
+      background: #666;
+    }
+
+    #botoes {
+      margin-top: 20px;
+    }
+
     #resultado {
-      margin-top:20px;
-      background:#101010;
-      padding:15px;
+      margin-top: 25px;
+      background: #101010;
+      padding: 15px;
+      white-space: pre-line;
     }
+
     #pergunta {
-      margin-top:15px;
-      font-style:italic;
-      color:#ccc;
+      margin-top: 15px;
+      font-style: italic;
+      color: #ccc;
     }
+
     footer {
-      margin-top:30px;
-      text-align:center;
-      font-size:12px;
-      color:#777;
+      margin-top: 35px;
+      text-align: center;
+      font-size: 12px;
+      color: #777;
     }
   </style>
 </head>
+
 <body>
 
-<h1>Escrita Desafio</h1>
+  <h1>Escrita Desafio</h1>
 
-<div class="bloco">
-  <label>Tema</label>
-  <select id="tema"></select>
-  <input id="temaNovo" placeholder="Adicionar tema">
-  <button type="button" id="btnTema">Adicionar</button>
-</div>
+  <!-- TEMA -->
+  <div class="bloco">
+    <label>Tema</label>
+    <select id="tema"></select>
+    <input id="temaNovo" placeholder="Adicionar tema">
+    <button type="button" id="btnTema">Adicionar</button>
+  </div>
 
-<div class="bloco">
-  <label>Local</label>
-  <select id="local"></select>
-  <input id="localNovo" placeholder="Adicionar local">
-  <button type="button" id="btnLocal">Adicionar</button>
-</div>
+  <!-- LOCAL -->
+  <div class="bloco">
+    <label>Local</label>
+    <select id="local"></select>
+    <input id="localNovo" placeholder="Adicionar local">
+    <button type="button" id="btnLocal">Adicionar</button>
+  </div>
 
-<div class="bloco">
-  <label>Visão</label>
-  <select id="visao"></select>
-  <input id="visaoNovo" placeholder="Adicionar visão">
-  <button type="button" id="btnVisao">Adicionar</button>
-</div>
+  <!-- VISÃO -->
+  <div class="bloco">
+    <label>Visão</label>
+    <select id="visao"></select>
+    <input id="visaoNovo" placeholder="Adicionar visão">
+    <button type="button" id="btnVisao">Adicionar</button>
+  </div>
 
-<div class="bloco">
-  <label>Tom</label>
-  <select id="tom"></select>
-  <input id="tomNovo" placeholder="Adicionar tom">
-  <button type="button" id="btnTom">Adicionar</button>
-</div>
+  <!-- TOM -->
+  <div class="bloco">
+    <label>Tom</label>
+    <select id="tom"></select>
+    <input id="tomNovo" placeholder="Adicionar tom">
+    <button type="button" id="btnTom">Adicionar</button>
+  </div>
 
-<div class="bloco">
-  <label>Gênero</label>
-  <select id="genero"></select>
-  <input id="generoNovo" placeholder="Adicionar gênero">
-  <button type="button" id="btnGenero">Adicionar</button>
-</div>
+  <!-- GÊNERO -->
+  <div class="bloco">
+    <label>Gênero</label>
+    <select id="genero"></select>
+    <input id="generoNovo" placeholder="Adicionar gênero">
+    <button type="button" id="btnGenero">Adicionar</button>
+  </div>
 
-<button type="button" id="btnGerar">Gerar ideia</button>
+  <!-- BOTÕES -->
+  <div id="botoes">
+    <button type="button" id="btnGerar">Gerar ideia</button>
+    <button type="button" id="btnAleatorio">Gerar aleatório</button>
+  </div>
 
-<div id="resultado"></div>
-<div id="pergunta"></div>
+  <!-- RESULTADO -->
+  <div id="resultado"></div>
+  <div id="pergunta"></div>
 
-<footer>Idealizado por Edimar Silva</footer>
+  <footer>
+    Idealizado por Edimar Silva
+  </footer>
 
-<script src="app.js"></script>
+  <!-- SCRIPT -->
+  <script src="app.js"></script>
+
 </body>
 </html>
